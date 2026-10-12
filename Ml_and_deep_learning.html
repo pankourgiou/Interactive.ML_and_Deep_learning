@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NeuroLab — Interactive ML & Deep Learning</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f4f6fb;--pn:#fff;--fg:#14182b;--mut:#5b6280;--ac:#5b5bf0;--ac2:#f08a24;--bd:#dfe3f0;--ok:#16a34a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0e1a;--pn:#141930;--fg:#e8ebfa;--mut:#8f97bd;--ac:#7c83ff;--ac2:#ffb04d;--bd:#252c4d}}
+:root[data-theme="dark"]{--bg:#0b0e1a;--pn:#141930;--fg:#e8ebfa;--mut:#8f97bd;--ac:#7c83ff;--ac2:#ffb04d;--bd:#252c4d}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.6 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+.app{display:grid;grid-template-columns:240px 1fr;max-width:1300px;margin:auto}
+nav{position:sticky;top:env(safe-area-inset-top,0px);height:100vh;padding:24px 16px;border-right:1px solid var(--bd);align-self:start}
+.logo{font-weight:800;font-size:20px;letter-spacing:-.5px}.logo span{color:var(--ac)}
+nav a{display:block;padding:9px 12px;margin:3px 0;border-radius:10px;color:var(--mut);text-decoration:none;font-weight:500}
+nav a:hover{background:var(--pn);color:var(--fg)}nav a.ok::after{content:" ✓";color:var(--ok)}
+.bar{height:6px;background:var(--bd);border-radius:9px;margin:16px 0 4px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:.4s}
+main{padding:28px 28px 80px;min-width:0}
+.hero{padding:36px;border-radius:22px;background:linear-gradient(135deg,var(--ac),#b05cf0 60%,var(--ac2));color:#fff;margin-bottom:28px}
+.hero h1{margin:0 0 8px;font-size:clamp(26px,4vw,42px);letter-spacing:-1px}.hero p{margin:0;max-width:640px;opacity:.92}
+section{background:var(--pn);border:1px solid var(--bd);border-radius:20px;padding:26px;margin-bottom:26px}
+.tag{font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--ac);text-transform:uppercase}
+h2{margin:4px 0 10px;font-size:26px;letter-spacing:-.5px}
+.eq{font-family:ui-monospace,Menlo,monospace;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px 14px;margin:10px 0;overflow-x:auto;white-space:nowrap}
+.lab{display:grid;grid-template-columns:260px 1fr;gap:20px;margin-top:18px}
+.ctrls{background:var(--bg);border-radius:14px;padding:14px;border:1px solid var(--bd);align-self:start}
+.ctl{margin-bottom:12px}.ctl label{display:flex;justify-content:space-between;font-size:12.5px;color:var(--mut);font-weight:600}.ctl b{color:var(--ac2);font-family:ui-monospace,monospace}
+input[type=range]{width:100%;accent-color:var(--ac)}select{width:100%;padding:7px;border-radius:8px;background:var(--pn);color:var(--fg);border:1px solid var(--bd)}
+button{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:9px 14px;font-weight:600;cursor:pointer;margin:2px 4px 2px 0}
+button.g{background:transparent;color:var(--fg);border:1px solid var(--bd)}button:hover{filter:brightness(1.1)}
+.viz{display:flex;flex-wrap:wrap;gap:14px;min-width:0}.viz>div{flex:1 1 300px;min-width:0}
+canvas{width:100%;height:auto;background:var(--bg);border:1px solid var(--bd);border-radius:12px;display:block}
+.cap{font-size:12px;color:var(--mut);margin:4px 2px 0}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;width:100%}.stats span{background:var(--bg);border:1px solid var(--bd);border-radius:9px;padding:5px 10px;font-size:13px;font-family:ui-monospace,monospace}
+.try{border-left:3px solid var(--ac2);padding:4px 14px;margin:16px 0 0;color:var(--mut)}.try b{color:var(--fg)}
+details{margin-top:12px}summary{cursor:pointer;font-weight:600;color:var(--ac)}
+@media(max-width:860px){.app{grid-template-columns:1fr}nav{position:static;height:auto;border:0;padding:16px}.lab{grid-template-columns:1fr}main{padding:14px}}
+</style></head><body>
+<div class="app">
+<nav><div class="logo">Neuro<span>Lab</span></div><div class="bar"><i id="pb"></i></div><div id="pt" class="cap">0 / 4 modules complete</div><br>
+<a href="#m1">1 · Gradient Descent</a><a href="#m2">2 · Bias &amp; Variance</a><a href="#m3">3 · Optimizers</a><a href="#m4">4 · Neural Networks</a>
+<button class="g" onclick="document.documentElement.dataset.theme=(document.documentElement.dataset.theme=='dark'?'light':'dark');redrawAll()">◐ Theme</button></nav>
+<main>
+<div class="hero"><h1>Machine &amp; Deep Learning, hands-on.</h1><p>Four modules, twenty-plus live parameters. Don't just read about learning rates, overfitting or activation functions — break them, then fix them. Everything below trains in your browser in real time.</p></div>
+
+<section id="m1"><div class="tag">Module 1 · Foundations</div><h2>Gradient descent &amp; linear regression</h2>
+<p>Learning means minimizing a loss. For a line ŷ = wx + b, the mean squared error is a bowl; the gradient points uphill, so we step the opposite way, scaled by the learning rate η.</p>
+<div class="eq">L = (1/n) Σ (wxᵢ + b − yᵢ)²   ·   w ← w − η ∂L/∂w   ·   b ← b − η ∂L/∂b</div>
+<div class="lab"><div><div class="ctrls" id="c1"></div><button id="t1">▶ Train</button><button class="g" id="r1">Reset</button><button class="g" id="d1">New data</button></div>
+<div class="viz"><div><canvas id="a1" width="560" height="320"></canvas><div class="cap">Data (true line: y = 2x + 1) and the current fit</div></div><div><canvas id="b1" width="560" height="320"></canvas><div class="cap">Training loss, log scale</div></div><div class="stats" id="s1"></div></div></div>
+<div class="try"><b>Try:</b> push η above ~0.9 and watch the loss explode. Drop it to 0.001 and see how slowly it crawls. Raise noise — the loss floor rises, because noise can't be fit away.</div>
+<button class="g" onclick="done(1)">Mark complete</button></section>
+
+<section id="m2"><div class="tag">Module 2 · Generalization</div><h2>Bias, variance &amp; regularization</h2>
+<p>A model that nails training data may fail on new data. Fit a polynomial of degree d to noisy samples of sin(3x). Too low: <i>underfit</i> (high bias). Too high: it memorizes noise (high variance). Ridge regularization λ penalizes large weights to tame this.</p>
+<div class="eq">w* = (ΦᵀΦ + λI)⁻¹ Φᵀy      test error = bias² + variance + irreducible noise</div>
+<div class="lab"><div><div class="ctrls" id="c2"></div><button id="d2">Resample data</button></div>
+<div class="viz"><div><canvas id="a2" width="560" height="320"></canvas><div class="cap">Filled dots: train · hollow: test · line: model</div></div><div><canvas id="b2" width="560" height="320"></canvas><div class="cap">Error vs degree (log). Orange = test, indigo = train. Marker = current degree</div></div><div class="stats" id="s2"></div></div></div>
+<div class="try"><b>Try:</b> set samples=15, degree=12 and watch test error spike. Now slide λ up — the wiggles vanish. Add more samples and see overfitting shrink without regularization.</div>
+<button class="g" onclick="done(2)">Mark complete</button></section>
+
+<section id="m3"><div class="tag">Module 3 · Optimization</div><h2>The optimizer race</h2>
+<p>Real loss surfaces are ill-conditioned: steep in one direction, flat in another. Four optimizers start at the same point on the same surface. Momentum accumulates velocity; RMSprop rescales by recent gradient size; Adam does both.</p>
+<div class="eq">Adam: m ← β₁m + (1−β₁)g · v ← β₂v + (1−β₂)g² · θ ← θ − η m̂/(√v̂ + ε)</div>
+<div class="lab"><div><div class="ctrls" id="c3"></div><button id="t3">▶ Run</button><button class="g" id="r3">Reset</button></div>
+<div class="viz"><div style="flex-basis:380px"><canvas id="a3" width="420" height="420"></canvas><div class="cap">Contours of the loss. <span style="color:#ef4444">SGD</span> · <span style="color:#22c55e">Momentum</span> · <span style="color:#3b82f6">RMSprop</span> · <span style="color:#f59e0b">Adam</span></div></div><div class="stats" id="s3"></div></div></div>
+<div class="try"><b>Try:</b> condition number = 30 with a small η: SGD zig-zags while Adam glides. Add bumpiness to create local minima and see who gets trapped.</div>
+<button class="g" onclick="done(3)">Mark complete</button></section>
+
+<section id="m4"><div class="tag">Module 4 · Deep Learning</div><h2>Neural network playground</h2>
+<p>A network stacks linear maps and non-linear activations, learning a decision boundary by backpropagation: the chain rule applied layer by layer. Without non-linearity, depth adds nothing — depth only matters because of activations.</p>
+<div class="eq">aˡ = σ(Wˡaˡ⁻¹ + bˡ)    ·    δˡ = (Wˡ⁺¹ᵀ δˡ⁺¹) ⊙ σ′(aˡ)    ·    ∂L/∂Wˡ = δˡ aˡ⁻¹ᵀ</div>
+<div class="lab"><div><div class="ctrls" id="c4"></div><button id="t4">▶ Train</button><button class="g" id="r4">Reinit weights</button><button class="g" id="d4">New data</button></div>
+<div class="viz"><div style="flex-basis:340px"><canvas id="a4" width="360" height="360"></canvas><div class="cap">Decision boundary (blue/orange) over training points</div></div><div><canvas id="b4" width="560" height="320"></canvas><div class="cap">Train loss (indigo) vs held-out test loss (orange)</div></div><div class="stats" id="s4"></div></div></div>
+<div class="try"><b>Try:</b> Spiral + 1 layer × 4 neurons fails; 3 layers × 8 succeeds. Set noise high with a big net and no L2: train loss ↓ while test loss ↑ — overfitting. Switch to sigmoid and watch training slow (vanishing gradients).</div>
+<details><summary>Check yourself</summary><p>Why does XOR need a hidden layer? Because no single line separates the classes; a hidden layer lets the network build new features (e.g. “x>0” and “y>0”) in which the problem becomes linearly separable.</p></details>
+<button class="g" onclick="done(4)">Mark complete</button></section>
+</main></div>
+<script>
+const $=s=>document.querySelector(s),css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const gauss=()=>Math.sqrt(-2*Math.log(Math.random()+1e-12))*Math.cos(6.2832*Math.random());
+const cx=id=>$('#'+id).getContext('2d');
+const redraws=[];function redrawAll(){setTimeout(()=>redraws.forEach(f=>f()),30)}
+const doneSet=new Set();
+function done(n){doneSet.add(n);document.querySelector(`nav a[href="#m${n}"]`).classList.add('ok');$('#pb').style.width=doneSet.size*25+'%';$('#pt').textContent=doneSet.size+' / 4 modules complete'}
+function controls(el,defs,cb){const S={};defs.forEach(d=>{const r=document.createElement('div');r.className='ctl';
+if(d.o){r.innerHTML=`<label>${d.l}</label><select>${d.o.map(o=>`<option>${o}</option>`).join('')}</select>`;const s=r.querySelector('select');s.value=d.v;S[d.k]=()=>s.value;s.onchange=()=>cb(d.k)}
+else{r.innerHTML=`<label>${d.l}<b></b></label><input type=range min=${d.min} max=${d.max} step=${d.s} value=${d.v}>`;const i=r.querySelector('input'),b=r.querySelector('b');const u=()=>b.textContent=d.f?d.f(+i.value):i.value;u();i.oninput=()=>{u();cb(d.k)};S[d.k]=()=>d.t?d.t(+i.value):+i.value}
+el.appendChild(r)});return S}
+function plot(c,W,H,series,log){c.clearRect(0,0,W,H);let all=series.flatMap(s=>s.a).filter(v=>isFinite(v));if(!all.length){c.fillStyle=css('--mut');c.fillText('diverged / no data',20,30);return}
+const f=v=>log?Math.log10(Math.max(v,1e-6)):v;let lo=Math.min(...all.map(f)),hi=Math.max(...all.map(f));if(hi-lo<1e-9)hi=lo+1;const pad=24;
+c.strokeStyle=css('--bd');c.strokeRect(pad,8,W-pad-8,H-pad-8);c.fillStyle=css('--mut');c.font='11px sans-serif';c.fillText((log?'10^':'')+hi.toFixed(1),2,18);c.fillText((log?'10^':'')+lo.toFixed(1),2,H-pad);
+series.forEach(s=>{c.strokeStyle=s.col;c.lineWidth=2;c.beginPath();let st=0;s.a.forEach((v,i)=>{if(!isFinite(v))return;const x=pad+i/Math.max(1,s.a.length-1)*(W-pad-8),y=8+(1-(f(v)-lo)/(hi-lo))*(H-pad-8);st?c.lineTo(x,y):c.moveTo(x,y);st=1});c.stroke()})}
+function stats(id,o){$(id).innerHTML=Object.entries(o).map(([k,v])=>`<span>${k}: ${v}</span>`).join('')}
+
+/* ---------- Module 1 ---------- */
+(()=>{let X,Y,w,b,L,run=0;const C=controls($('#c1'),[
+{k:'lr',l:'Learning rate η',min:-3,max:.3,s:.05,v:-1.3,t:v=>10**v,f:v=>(10**v).toFixed(3)},
+{k:'nz',l:'Noise σ',min:0,max:1,s:.05,v:.3},{k:'n',l:'Samples',min:5,max:200,s:1,v:40},{k:'sp',l:'Steps / frame',min:1,max:20,s:1,v:2},
+{k:'w0',l:'Initial w',min:-4,max:4,s:.1,v:-2},{k:'b0',l:'Initial b',min:-4,max:4,s:.1,v:-2}],k=>{if(k=='nz'||k=='n')gen();if(k=='w0'||k=='b0')rst();draw()});
+function gen(){X=[];Y=[];for(let i=0;i<C.n();i++){const x=Math.random()*2-1;X.push(x);Y.push(2*x+1+gauss()*C.nz())}rst()}
+function rst(){w=C.w0();b=C.b0();L=[];run=0;$('#t1').textContent='▶ Train';draw()}
+const loss=()=>X.reduce((s,x,i)=>s+(w*x+b-Y[i])**2,0)/X.length;
+function step(){const lr=C.lr(),n=X.length;let gw=0,gb=0;X.forEach((x,i)=>{const e=w*x+b-Y[i];gw+=2*e*x/n;gb+=2*e/n});w-=lr*gw;b-=lr*gb;L.push(loss());if(L.length>600)L.shift()}
+function draw(){const c=cx('a1'),W=560,H=320;c.clearRect(0,0,W,H);const px=x=>(x+1)/2*W,py=y=>H-(y+4)/10*H;
+c.strokeStyle=css('--bd');c.beginPath();c.moveTo(0,py(0));c.lineTo(W,py(0));c.moveTo(px(0),0);c.lineTo(px(0),H);c.stroke();
+c.fillStyle=css('--ac');X.forEach((x,i)=>{c.beginPath();c.arc(px(x),py(Y[i]),4,0,7);c.fill()});
+c.strokeStyle=css('--ac2');c.lineWidth=3;c.beginPath();c.moveTo(px(-1),py(-w+b));c.lineTo(px(1),py(w+b));c.stroke();c.lineWidth=1;
+plot(cx('b1'),560,320,[{a:L,col:css('--ac')}],1);const l=isFinite(loss())?loss().toFixed(4):'DIVERGED';stats('#s1',{w:w.toFixed(3),b:b.toFixed(3),MSE:l,iter:L.length})}
+$('#t1').onclick=()=>{run=!run;$('#t1').textContent=run?'⏸ Pause':'▶ Train'};$('#r1').onclick=rst;$('#d1').onclick=gen;
+(function loop(){if(run){for(let i=0;i<C.sp();i++)step();draw()}requestAnimationFrame(loop)})();gen();redraws.push(draw)})();
+
+/* ---------- Module 2 ---------- */
+(()=>{let tr,te;const C=controls($('#c2'),[{k:'d',l:'Polynomial degree',min:1,max:12,s:1,v:3},{k:'n',l:'Train samples',min:8,max:100,s:1,v:20},
+{k:'nz',l:'Noise σ',min:0,max:.6,s:.02,v:.2},{k:'lam',l:'Ridge λ (log)',min:-8,max:1,s:.25,v:-8,t:v=>v<=-8?0:10**v,f:v=>v<=-8?'0':(10**v).toExponential(1)}],k=>{if(k=='n'||k=='nz')gen();draw()});
+const f=x=>Math.sin(3*x);
+function gen(){const g=n=>Array.from({length:n},()=>{const x=Math.random()*2-1;return[x,f(x)+gauss()*C.nz()]});tr=g(C.n());te=g(150);draw()}
+function solve(A,b){const n=b.length;for(let i=0;i<n;i++){let m=i;for(let r=i+1;r<n;r++)if(Math.abs(A[r][i])>Math.abs(A[m][i]))m=r;[A[i],A[m]]=[A[m],A[i]];[b[i],b[m]]=[b[m],b[i]];for(let r=i+1;r<n;r++){const q=A[r][i]/A[i][i];for(let c=i;c<n;c++)A[r][c]-=q*A[i][c];b[r]-=q*b[i]}}const x=Array(n).fill(0);for(let i=n-1;i>=0;i--){let s=b[i];for(let c=i+1;c<n;c++)s-=A[i][c]*x[c];x[i]=s/A[i][i]}return x}
+function fit(d,lam){const n=d+1,A=Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>tr.reduce((s,p)=>s+p[0]**(i+j),0)+(i==j?lam+1e-9:0))),b=Array.from({length:n},(_,i)=>tr.reduce((s,p)=>s+p[1]*p[0]**i,0));return solve(A,b)}
+const ev=(w,x)=>w.reduce((s,c,i)=>s+c*x**i,0),mse=(w,D)=>D.reduce((s,p)=>s+(ev(w,p[0])-p[1])**2,0)/D.length;
+function draw(){const c=cx('a2'),W=560,H=320,w=fit(C.d(),C.lam());c.clearRect(0,0,W,H);const px=x=>(x+1)/2*W,py=y=>H/2-y*H/4;
+c.strokeStyle=css('--bd');c.beginPath();c.moveTo(0,H/2);c.lineTo(W,H/2);c.stroke();
+c.strokeStyle=css('--mut');c.setLineDash([4,4]);c.beginPath();for(let i=0;i<=100;i++){const x=i/50-1;i?c.lineTo(px(x),py(f(x))):c.moveTo(px(x),py(f(x)))}c.stroke();c.setLineDash([]);
+c.strokeStyle=css('--ac2');c.lineWidth=3;c.beginPath();for(let i=0;i<=100;i++){const x=i/50-1,y=Math.max(-3,Math.min(3,ev(w,x)));i?c.lineTo(px(x),py(y)):c.moveTo(px(x),py(y))}c.stroke();c.lineWidth=1;
+te.forEach(p=>{c.strokeStyle=css('--mut');c.beginPath();c.arc(px(p[0]),py(p[1]),2.5,0,7);c.stroke()});c.fillStyle=css('--ac');tr.forEach(p=>{c.beginPath();c.arc(px(p[0]),py(p[1]),4.5,0,7);c.fill()});
+const T=[],E=[];for(let d=1;d<=12;d++){const q=fit(d,C.lam());T.push(mse(q,tr));E.push(mse(q,te))}
+plot(cx('b2'),560,320,[{a:T,col:css('--ac')},{a:E,col:css('--ac2')}],1);const g=cx('b2'),pad=24,x=pad+(C.d()-1)/11*(560-pad-8);g.fillStyle=css('--fg');g.fillRect(x-1,8,2,288);
+stats('#s2',{'train MSE':T[C.d()-1].toFixed(4),'test MSE':E[C.d()-1].toFixed(4),gap:(E[C.d()-1]-T[C.d()-1]).toFixed(4),params:C.d()+1})}
+$('#d2').onclick=gen;gen();redraws.push(draw)})();
+
+/* ---------- Module 3 ---------- */
+(()=>{const nm=['SGD','Momentum','RMSprop','Adam'],col=['#ef4444','#22c55e','#3b82f6','#f59e0b'];let P,run=0,hm=document.createElement('canvas');hm.width=hm.height=140;
+const C=controls($('#c3'),[{k:'lr',l:'Learning rate η',min:-3,max:-.5,s:.05,v:-1.7,t:v=>10**v,f:v=>(10**v).toFixed(3)},{k:'b1',l:'β₁ (momentum)',min:0,max:.99,s:.01,v:.9},{k:'b2',l:'β₂ (Adam)',min:.9,max:.9999,s:.0001,v:.999},
+{k:'k',l:'Condition number κ',min:1,max:40,s:1,v:12},{k:'bu',l:'Bumpiness',min:0,max:1.5,s:.05,v:0},{k:'sp',l:'Steps / frame',min:1,max:10,s:1,v:1}],k=>{if(k!='sp')rst()});
+const F=(x,y)=>.5*x*x+.5*C.k()*y*y+C.bu()*Math.sin(3*x)*Math.sin(3*y);
+const G=(x,y)=>[x+C.bu()*3*Math.cos(3*x)*Math.sin(3*y),C.k()*y+C.bu()*3*Math.sin(3*x)*Math.cos(3*y)];
+function rst(){P=nm.map(()=>({x:2.5,y:2,vx:0,vy:0,sx:0,sy:0,mx:0,my:0,t:0,p:[[2.5,2]]}));const c=hm.getContext('2d'),im=c.createImageData(140,140);let mx=F(3,3)+F(0,3);
+for(let j=0;j<140;j++)for(let i=0;i<140;i++){const v=Math.max(0,F(i/140*6-3,j/140*6-3)+1),t=Math.log(1+v)/Math.log(1+mx),bnd=(t*14)%1<.1?.75:1,o=(j*140+i)*4,dk=document.documentElement.dataset.theme!='light'&&matchMedia('(prefers-color-scheme:dark)').matches||document.documentElement.dataset.theme=='dark';
+const a=dk?[16,22,52]:[235,238,252],z=dk?[120,90,200]:[170,150,240];for(let q=0;q<3;q++)im.data[o+q]=(a[q]+(z[q]-a[q])*t)*bnd;im.data[o+3]=255}c.putImageData(im,0,0);run=0;$('#t3').textContent='▶ Run';draw()}
+function step(){const lr=C.lr(),b1=C.b1(),b2=C.b2();P.forEach((p,i)=>{const[gx,gy]=G(p.x,p.y);
+if(i==0){p.x-=lr*gx;p.y-=lr*gy}else if(i==1){p.vx=b1*p.vx+gx;p.vy=b1*p.vy+gy;p.x-=lr*p.vx;p.y-=lr*p.vy}
+else if(i==2){p.sx=.9*p.sx+.1*gx*gx;p.sy=.9*p.sy+.1*gy*gy;p.x-=lr*gx/(Math.sqrt(p.sx)+1e-8);p.y-=lr*gy/(Math.sqrt(p.sy)+1e-8)}
+else{p.t++;p.mx=b1*p.mx+(1-b1)*gx;p.my=b1*p.my+(1-b1)*gy;p.sx=b2*p.sx+(1-b2)*gx*gx;p.sy=b2*p.sy+(1-b2)*gy*gy;const c1=1-b1**p.t,c2=1-b2**p.t;p.x-=lr*(p.mx/c1)/(Math.sqrt(p.sx/c2)+1e-8);p.y-=lr*(p.my/c1)/(Math.sqrt(p.sy/c2)+1e-8)}
+p.x=Math.max(-6,Math.min(6,p.x));p.y=Math.max(-6,Math.min(6,p.y));p.p.push([p.x,p.y]);if(p.p.length>400)p.p.shift()})}
+function draw(){const c=cx('a3'),S=420;c.drawImage(hm,0,0,S,S);const m=v=>(v+3)/6*S;
+P.forEach((p,i)=>{c.strokeStyle=col[i];c.lineWidth=2;c.beginPath();p.p.forEach((q,j)=>j?c.lineTo(m(q[0]),m(q[1])):c.moveTo(m(q[0]),m(q[1])));c.stroke();c.fillStyle=col[i];c.beginPath();c.arc(m(p.x),m(p.y),5,0,7);c.fill()});
+const o={};P.forEach((p,i)=>o[nm[i]]=F(p.x,p.y).toFixed(3));stats('#s3',o)}
+$('#t3').onclick=()=>{run=!run;$('#t3').textContent=run?'⏸ Pause':'▶ Run'};$('#r3').onclick=rst;
+(function loop(){if(run){for(let i=0;i<C.sp();i++)step();draw()}requestAnimationFrame(loop)})();rst();redraws.push(rst)})();
+
+/* ---------- Module 4 ---------- */
+(()=>{let D,T,W,B,sz,Ltr=[],Lte=[],ep=0,run=0;
+const C=controls($('#c4'),[{k:'ds',l:'Dataset',o:['circles','xor','moons','spiral'],v:'spiral'},{k:'L',l:'Hidden layers',min:1,max:4,s:1,v:2},{k:'h',l:'Neurons / layer',min:2,max:16,s:1,v:8},
+{k:'a',l:'Activation',o:['tanh','relu','sigmoid'],v:'tanh'},{k:'lr',l:'Learning rate',min:-3,max:0,s:.05,v:-1.2,t:v=>10**v,f:v=>(10**v).toFixed(3)},{k:'l2',l:'L2 weight decay',min:-6,max:-1,s:.25,v:-6,t:v=>v<=-6?0:10**v,f:v=>v<=-6?'0':(10**v).toExponential(1)},
+{k:'bs',l:'Batch size',min:1,max:64,s:1,v:16},{k:'n',l:'Train points',min:30,max:300,s:10,v:200},{k:'nz',l:'Data noise',min:0,max:.3,s:.01,v:.04},{k:'sp',l:'Steps / frame',min:1,max:40,s:1,v:8}],
+k=>{if(['ds','n','nz'].includes(k))gen();else if(['L','h','a'].includes(k))init();draw()});
+const act={tanh:[Math.tanh,a=>1-a*a],relu:[z=>Math.max(0,z),a=>a>0?1:0],sigmoid:[z=>1/(1+Math.exp(-z)),a=>a*(1-a)]};
+function data(n){const P=[],ty=C.ds(),nz=C.nz();for(let i=0;i<n;i++){let x,y,c=i%2;
+if(ty=='circles'){const r=c?1:.4,a=Math.random()*6.283;x=r*Math.cos(a);y=r*Math.sin(a)}
+else if(ty=='xor'){x=Math.random()*2-1;y=Math.random()*2-1;c=x*y>0?1:0}
+else if(ty=='moons'){const a=Math.random()*Math.PI;if(c){x=Math.cos(a);y=Math.sin(a)}else{x=1-Math.cos(a);y=.5-Math.sin(a)}x=(x-.5)*1.2;y=(y-.25)*1.2}
+else{const t=.3+Math.random()*3.2,a=t*1.8+c*Math.PI,r=t/4;x=r*Math.cos(a);y=r*Math.sin(a)}
+P.push([x+gauss()*nz,y+gauss()*nz,c])}return P}
+function gen(){D=data(C.n());T=data(120);init()}
+function init(){sz=[2];for(let i=0;i<C.L();i++)sz.push(C.h());sz.push(1);W=[];B=[];for(let l=1;l<sz.length;l++){const s=Math.sqrt(2/sz[l-1]);W.push(Array.from({length:sz[l]},()=>Array.from({length:sz[l-1]},()=>gauss()*s)));B.push(Array(sz[l]).fill(0))}Ltr=[];Lte=[];ep=0;draw()}
+function fwd(x){const A=[x],f=act[C.a()][0];for(let l=0;l<W.length;l++){const p=A[l],o=W[l].map((r,j)=>{let z=B[l][j];for(let i=0;i<r.length;i++)z+=r[i]*p[i];return z});A.push(l==W.length-1?o.map(z=>1/(1+Math.exp(-z))):o.map(f))}return A}
+function step(){const bs=C.bs(),lr=C.lr(),l2=C.l2(),d=act[C.a()][1],gW=W.map(m=>m.map(r=>r.map(()=>0))),gB=B.map(b=>b.map(()=>0));
+for(let s=0;s<bs;s++){const p=D[Math.floor(Math.random()*D.length)],A=fwd([p[0],p[1]]);let dl=[A[A.length-1][0]-p[2]];
+for(let l=W.length-1;l>=0;l--){const nd=Array(sz[l]).fill(0);for(let j=0;j<dl.length;j++){gB[l][j]+=dl[j];for(let i=0;i<sz[l];i++){gW[l][j][i]+=dl[j]*A[l][i];nd[i]+=W[l][j][i]*dl[j]}}
+if(l>0)for(let i=0;i<nd.length;i++)nd[i]*=d(A[l][i]);dl=nd}}
+for(let l=0;l<W.length;l++)for(let j=0;j<W[l].length;j++){B[l][j]-=lr*gB[l][j]/bs;for(let i=0;i<W[l][j].length;i++)W[l][j][i]-=lr*(gW[l][j][i]/bs+l2*W[l][j][i])}ep+=bs/D.length}
+function ev(S){let l=0,a=0;S.forEach(p=>{const o=fwd([p[0],p[1]]).pop()[0];l-=p[2]?Math.log(o+1e-9):Math.log(1-o+1e-9);a+=(o>.5)==!!p[2]});return[l/S.length,a/S.length]}
+function draw(){const c=cx('a4'),S=360,N=36,q=S/N,v=x=>(x+1.5)/3*S,dk=getComputedStyle(document.body).backgroundColor!='rgb(244, 246, 251)';
+for(let j=0;j<N;j++)for(let i=0;i<N;i++){const o=fwd([(i+.5)/N*3-1.5,(j+.5)/N*3-1.5]).pop()[0];c.fillStyle=`rgba(${o>.5?'240,138,36':'91,91,240'},${.15+.6*Math.abs(o-.5)*2})`;c.clearRect(i*q,j*q,q,q);c.fillStyle=dk?'#0b0e1a':'#f4f6fb';c.fillRect(i*q,j*q,q+1,q+1);c.fillStyle=`rgba(${o>.5?'240,138,36':'91,91,240'},${.15+.6*Math.abs(o-.5)*2})`;c.fillRect(i*q,j*q,q+1,q+1)}
+D.forEach(p=>{c.fillStyle=p[2]?'#f08a24':'#5b5bf0';c.strokeStyle='#fff';c.beginPath();c.arc(v(p[0]),v(p[1]),3.5,0,7);c.fill();c.stroke()});
+const[a,b]=ev(D),[a2,b2]=ev(T);if(run||!Ltr.length){Ltr.push(a);Lte.push(a2)}if(Ltr.length>500){Ltr.shift();Lte.shift()}
+plot(cx('b4'),560,320,[{a:Ltr,col:css('--ac')},{a:Lte,col:css('--ac2')}],1);
+const np=W.reduce((s,m,l)=>s+m.length*(m[0].length+1),0);stats('#s4',{epoch:ep.toFixed(1),'train loss':a.toFixed(3),'test loss':a2.toFixed(3),'train acc':(b*100).toFixed(0)+'%','test acc':(b2*100).toFixed(0)+'%',params:np})}
+$('#t4').onclick=()=>{run=!run;$('#t4').textContent=run?'⏸ Pause':'▶ Train'};$('#r4').onclick=init;$('#d4').onclick=gen;
+(function loop(){if(run){for(let i=0;i<C.sp();i++)step();draw()}requestAnimationFrame(loop)})();gen();redraws.push(draw)})();
+</script></body></html>
